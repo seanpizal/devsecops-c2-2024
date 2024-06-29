@@ -6,11 +6,36 @@ on:
       -  feature-*
 
 jobs:
-  build:
+  SAST:
     runs-on: 'ubuntu-latest'
 
     steps:
-      - name: Test GitHub Workflow
+      - name: Clone Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: SonarCloud Configuration
         run: |
-          echo "Testing GitHub Workflow"
-      
+          curl -f -X POST -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/projects/create' -d 'name=${{ github.event.repository.name }}' -d 'project=${{ github.event.repository.name }}' -d 'organization=${{ github.repository_owner }}' -d 'visibility=public'
+          if [ $? -ne 0 ]; then
+            echo "Proyecto ya existe en Sonarcloud"
+          else
+            echo "Proyecto ${{ github.event.repository.name }} creado exitosamente en Sonarcloud"
+            echo "Se establece rama main como rama por defecto"
+            curl -X POST -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/project_branches/rename' -d 'name=main' -d 'project=${{ github.event.repository.name }}'
+          fi
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v2.3.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: src
+          args: >
+            -Dsonar.organization=${{ github.repository_owner }}
+            -Dsonar.projectKey=${{ github.event.repository.name }}
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
