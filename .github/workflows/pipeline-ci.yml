@@ -15,9 +15,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install dependencies
-        run: npm install
-
       - name: SonarCloud Configuration
         run: |
           sonarcloud_create_project=$(curl -s -u '${{ secrets.SONAR_TOKEN }}:' '${{ secrets.SONAR_HOST_URL }}/api/projects/create' \
@@ -32,9 +29,13 @@ jobs:
             echo "Proyecto ${{ github.event.repository.name }} creado exitosamente en Sonarcloud"
             echo "Se establece rama main como rama por defecto"
             curl -s -u '${{ secrets.SONAR_TOKEN }}:' '${{ secrets.SONAR_HOST_URL }}/api/project_branches/rename' -d 'name=main' -d 'project=${{ github.event.repository.name }}'
-          elif [ echo "$sonarcloud_create_project_response" | jq .errors[].msg | sed -e 's/^"//' -e 's/"$//' -eq "Could not create Project, key already exists: ${{ github.event.repository.name }}"]
+          elif [ echo "$sonarcloud_create_project_response" | jq .errors[].msg | sed -e 's/^"//' -e 's/"$//' -eq "Could not create Project, key already exists: ${{ github.event.repository.name }}"]; then
             echo "Proyecto ya existe en Sonarcloud"
           fi
+
+      - name: Install dependencies
+        run: npm install
+
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@v2.3.0
         env:
