@@ -1,0 +1,16 @@
+name: pipeline-ci
+
+on:
+  push:
+    branches:
+      -  feature-*
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - name: Test GitHub Workflow
+        run: |
+          echo "Testing GitHub Workflow"
+      
