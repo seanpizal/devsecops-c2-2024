@@ -30,7 +30,7 @@ jobs:
             echo "Se establece rama main como rama por defecto"
             curl -s -u '${{ secrets.SONAR_TOKEN }}:' '${{ secrets.SONAR_HOST_URL }}/api/project_branches/rename' -d 'name=main' -d 'project=${{ github.event.repository.name }}'
           else
-            error_msg = $(echo "$sonarcloud_create_project_response" | jq .errors[].msg | sed -e 's/^"//' -e 's/"$//')
+            error_msg=$(echo "$sonarcloud_create_project_response" | jq .errors[].msg | sed -e 's/^"//' -e 's/"$//')
             if [[ "$error_msg" == Could not create Project, key already exists: ${{ github.event.repository.name }}" ]]; then
               echo "Proyecto ya existe en Sonarcloud"
             else
