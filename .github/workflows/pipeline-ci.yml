@@ -96,7 +96,7 @@ jobs:
           critical_vulnerabilities=$(jq '[ .dependencies[].vulnerabilities[]? | select(.severity?|ascii_upcase == "CRITICAL")] | length' ${{github.workspace}}/reports/dependency-check-report.json)
           high_vulnerabilities=$(jq '[ .dependencies[].vulnerabilities[]? | select(.severity?|ascii_upcase == "HIGH")] | length' ${{github.workspace}}/reports/dependency-check-report.json)
           medium_vulnerabilities=$(jq '[ .dependencies[].vulnerabilities[]? | select(.severity?|ascii_upcase == "MEDIUM")] | length' ${{github.workspace}}/reports/dependency-check-report.json)
-          if [ $critical_vulnerabilities -gt 0 || $high_vulnerabilities -gt 0 || $medium_vulnerabilities -gt 0 ]; then
+          if [ $critical_vulnerabilities -gt 0 ] || [ $high_vulnerabilities -gt 0 ] || [ $medium_vulnerabilities -gt 0 ]; then
             echo "::error title=SCA::Se han encontrado $critical_vulnerabilities vulnerabilidades Criticas, $high_vulnerabilities vulnerabilidades Altas y $medium_vulnerabilities vulnerabilidades Medias."
             exit 1
           else
