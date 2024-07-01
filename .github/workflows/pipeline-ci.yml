@@ -85,17 +85,20 @@ jobs:
             -f HTML
             --disableYarnAudit
 
+      - name: Upload Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: Dependency-Check Report
+          path: ${{github.workspace}}/reports
+
       - name: Evaluate Dependency-Check Report
         run: |
           critical_vulnerabilities=$(jq '[ .dependencies[].vulnerabilities[]? | select(.severity?|ascii_upcase == "CRITICAL")] | length' ${{github.workspace}}/reports/dependency-check-report.json)
           high_vulnerabilities=$(jq '[ .dependencies[].vulnerabilities[]? | select(.severity?|ascii_upcase == "HIGH")] | length' ${{github.workspace}}/reports/dependency-check-report.json)
           medium_vulnerabilities=$(jq '[ .dependencies[].vulnerabilities[]? | select(.severity?|ascii_upcase == "MEDIUM")] | length' ${{github.workspace}}/reports/dependency-check-report.json)
-          if [ $critical_vulnerabilities -gt 0 ]; then
-            echo "::error title=SCA::Se han encontrado $critical_vulnerabilities vulnerabilidades Criticas"
-          elif [ $high_vulnerabilities -gt 0 ]; then
-            echo "::error title=SCA::Se han encontrado $high_vulnerabilities vulnerabilidades Altas"
-          elif [ $medium_vulnerabilities -gt 0 ]; then
-            echo "::error title=SCA::Se han encontrado $high_vulnerabilities vulnerabilidades Medias"
+          if [ $critical_vulnerabilities -gt 0 || $high_vulnerabilities -gt 0 || $medium_vulnerabilities -gt 0 ]; then
+            echo "::error title=SCA::Se han encontrado $critical_vulnerabilities vulnerabilidades Criticas, $high_vulnerabilities vulnerabilidades Altas y $medium_vulnerabilities vulnerabilidades Medias."
+            exit 1
           else
             echo "No se han encontrado vulnerabilidades"
           fi
