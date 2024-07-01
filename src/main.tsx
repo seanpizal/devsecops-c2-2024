@@ -24,8 +24,16 @@ const root = ReactDOM.createRoot(
 
 // Ejemplo de Vulnerabilidad Alta
 
-const major_vul = [0,1,2];
-const result = major_vul.length >= 0;
+// const major_vul = [0,1,2];
+// const result = major_vul.length >= 0;
+
+// Ejemplo de Vulnerabilidad Media
+
+let minor_vul = true;
+
+if(!!minor_vul){
+  minor_vul = false;
+}
 
 root.render(
   <Provider store={store}>
