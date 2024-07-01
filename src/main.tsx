@@ -20,7 +20,12 @@ const root = ReactDOM.createRoot(
 );
 
 // Ejemplo de Vulnerabilidad Critica
-new RegExp("([");
+// new RegExp("([");
+
+// Ejemplo de Vulnerabilidad Alta
+
+const major_vul = [0,1,2];
+const result = major_vul.length >= 0;
 
 root.render(
   <Provider store={store}>
