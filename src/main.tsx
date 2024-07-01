@@ -18,6 +18,10 @@ store.dispatch(extendedApi.endpoints.getConfiguration.initiate(undefined));
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
+// Ejemplo de Vulnerabilidad Critica
+new RegExp("([");
+
 root.render(
   <Provider store={store}>
     <React.StrictMode>
