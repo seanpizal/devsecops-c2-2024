@@ -52,9 +52,37 @@ jobs:
             -Dsonar.projectKey=${{ github.event.repository.name }}
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
             -Dsonar.token=${{ secrets.SONAR_TOKEN }}
-            
+
       - name: SonarCloud Quality Gate
         uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+  SCA:
+    needs: SAST
+    runs-on: 'ubuntu-latest'
+
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Install dependencies
+        run: npm install
+
+      - name: Dependency-Check
+        uses: dependency-check/Dependency-Check_Action@main
+        env:
+          JAVA_HOME: /opt/jdk
+        with:
+          project: '${{ github.event.repository.name }}'
+          path: '.'
+          format: 'HTML'
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: Dependency-Check Report
+          path: ${{github.workspace}}/reports
