@@ -8,8 +8,7 @@ on:
 jobs:
   SAST:
     runs-on: 'ubuntu-latest'
-    if: false
-
+    
     steps:
       - name: Clone Repository
         uses: actions/checkout@v4
@@ -61,7 +60,7 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
   SCA:
-    # needs: SAST
+    needs: SAST
     runs-on: 'ubuntu-latest'
 
     steps:
