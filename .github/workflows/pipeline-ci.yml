@@ -80,8 +80,9 @@ jobs:
         with:
           project: '${{ github.event.repository.name }}'
           path: '.'
-          format: '[HTML, JSON]'
+          format: 'JSON'
           args: >
+            -f HTML
             --disableYarnAudit
 
       - name: Evaluate Dependency-Check Report
