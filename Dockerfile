@@ -3,7 +3,7 @@ WORKDIR /app
 COPY ./package.json .
 COPY ./yarn.lock .
 RUN yarn install
-RUN apk add --no-cache expat=2.4.3-3
+RUN apk add --no-cache expat~=2.4.3
 COPY . .
 ARG TMDB_V3_API_KEY
 ENV VITE_APP_TMDB_V3_API_KEY=${TMDB_V3_API_KEY}
