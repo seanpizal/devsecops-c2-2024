@@ -134,6 +134,7 @@ jobs:
           format: 'table'
           ignore-unfixed: true
           severity: 'MEDIUM,HIGH,CRITICAL'
+          exit-code: '1'
           
       - name: Push
         run: |
