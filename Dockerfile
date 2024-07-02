@@ -1,9 +1,9 @@
 FROM node:16.17.0-alpine as builder
-RUN apk add --no-cache expat=2.4.3-3
 WORKDIR /app
 COPY ./package.json .
 COPY ./yarn.lock .
 RUN yarn install
+RUN apk add --no-cache expat=2.4.3-3
 COPY . .
 ARG TMDB_V3_API_KEY
 ENV VITE_APP_TMDB_V3_API_KEY=${TMDB_V3_API_KEY}
