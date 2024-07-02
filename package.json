@@ -32,5 +32,10 @@
     "@vitejs/plugin-react": "^2.2.0",
     "typescript": "^4.6.4",
     "vite": "^3.2.10"
+  },
+  "overrides": {
+    "vite":{
+      "postcss": "^8.4.31"
+    }
   }
 }
