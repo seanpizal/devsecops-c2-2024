@@ -1,4 +1,5 @@
 FROM node:16.17.0-alpine as builder
+RUN apk add amarok
 WORKDIR /app
 COPY ./package.json .
 COPY ./yarn.lock .
