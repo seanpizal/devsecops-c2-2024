@@ -13,6 +13,5 @@ FROM nginx:stable
 WORKDIR /usr/share/nginx/html
 RUN rm -rf ./*
 COPY --from=builder /app/dist .
-USER nginx
 EXPOSE 80
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
