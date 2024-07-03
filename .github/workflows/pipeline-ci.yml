@@ -163,3 +163,8 @@ jobs:
         with:
           allow_issue_writing: false
           target: 'http://127.0.0.1:8080/'
+
+      - name: Stop and Remove Docker Image
+        run: |
+          docker stop ${{ github.event.repository.name }}
+          docker rm ${{ github.event.repository.name }}
